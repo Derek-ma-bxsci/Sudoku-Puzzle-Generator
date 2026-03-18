@@ -7,6 +7,7 @@ public class SudokuBoard{
     public int[][] getBoard(){
         return board;
     }
+    // REMINDER THAT METHODS CANT ACTUALLY CHANGE VARIABLES IMMEDIATELY YOU HAVE TO MAKE ANOTHER THEN SET IT TO THAT ONE
     public void initializeBoard(int[][] board){
         for (int i = 0; i < board.length; i++){
             for (int j = 0; j < board[0].length; j++){
@@ -15,12 +16,24 @@ public class SudokuBoard{
         }
     }
     public void createValidBoard(int[][] board){
-        // this one is the big one
+        // first fill all numbers with 0
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[0].length; j++){
+                board[i][j] = 0;
+            }
+        }
+
+        // keep filling board with random nums that are not already used
         while (findNextEmpty(board)[0] != -1){
-            int num = random9();
-            int[] coords = findNextEmpty(board);
-            if (!binaryContains(board, num, coords[0], coords[1]))
-                board[coords[0]][coords[1]] = num;
+            boolean availableValuePut = false;
+            while (availableValuePut){
+                int num = random9();
+                int[] coords = findNextEmpty(board);
+                if (!binaryContains(board, num, coords[0], coords[1])){
+                    board[coords[0]][coords[1]] = num;
+                    availableValuePut = true;
+                }
+            }
         }
     }
     public int[] findNextEmpty(int[][] board){
@@ -40,20 +53,16 @@ public class SudokuBoard{
         return (int)(Math.random() * 9) + 1;
     }
     public boolean binaryContains(int[][] a, int num, int rowIndex, int colIndex){
-        // looks at row
+        // finds values in row
         int[] row = a[rowIndex];
-        if (binaryIsIn(row, num))
-            returns true;
 
-        // looks at column
+        // finds values in column
         int[] col = new int[9];
         for (int i = 0; i < a.length; i++){
             col[i] = a[i][colIndex];
         }
-        if (binaryIsIn(col, num))
-            returns true;
 
-        // looks at square
+        // finds values in square
         int[] square = new int[9];
         int startRowIndex = (rowIndex / 3) * 3;
         int startColIndex = (colIndex / 3) * 3;
@@ -64,13 +73,12 @@ public class SudokuBoard{
                 regIndex++;
             }
         }
-        if (binaryIsIn(square, num))
-            returns true;
-        // maybe this instead?
-        //if (binaryIsIn(row, num) || binaryIsIn(col, num) || binaryIsIn(square, num))
-        //    return true;
+
+        // if the num is in any of them, return true;
+        if (binaryIsIn(row, num) || binaryIsIn(col, num) || binaryIsIn(square, num))
+            return true;
         
-        // if the num is not already in any of them, return false
+        // else return false
         return false;
     }
     
