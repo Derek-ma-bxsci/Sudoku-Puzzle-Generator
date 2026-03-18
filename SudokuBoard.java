@@ -1,12 +1,16 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 public class SudokuBoard{
     private int[][] board; 
+
     public SudokuBoard(){
-        initializeBoard(board);
+        board = createValidBoard();
     }
+
     public int[][] getBoard(){
         return board;
     }
+
     // REMINDER THAT METHODS CANT ACTUALLY CHANGE VARIABLES IMMEDIATELY YOU HAVE TO MAKE ANOTHER THEN SET IT TO THAT ONE
     public void initializeBoard(int[][] board){
         for (int i = 0; i < board.length; i++){
@@ -15,7 +19,9 @@ public class SudokuBoard{
             }
         }
     }
-    public void createValidBoard(int[][] board){
+
+    public int[][] createValidBoard(){
+        int[][] board = new int[9][9];
         // first fill all numbers with 0
         for (int i = 0; i < board.length; i++){
             for (int j = 0; j < board[0].length; j++){
@@ -26,15 +32,18 @@ public class SudokuBoard{
         // keep filling board with random nums that are not already used
         while (findNextEmpty(board)[0] != -1){
             boolean availableValuePut = false;
-            while (availableValuePut){
-                int num = random9();
+            ArrayList<Integer> usedNums = new ArrayList<>();
+            while (!availableValuePut){
+                int num = randomDistinct9(usedNums);
                 int[] coords = findNextEmpty(board);
                 if (!binaryContains(board, num, coords[0], coords[1])){
                     board[coords[0]][coords[1]] = num;
                     availableValuePut = true;
                 }
+                usedNums.add(num);
             }
         }
+        return board;
     }
     public int[] findNextEmpty(int[][] board){
         for (int i = 0; i < board.length; i++){
@@ -49,8 +58,12 @@ public class SudokuBoard{
         return coords;
     }
 
-    public int random9(){
-        return (int)(Math.random() * 9) + 1;
+    public int randomDistinct9(ArrayList<Integer> usedNums){
+        int randomNum = (int)(Math.random() * 9) + 1;
+        while (usedNums.contains(randomNum)){
+            randomNum = (int)(Math.random() * 9) + 1;
+        }
+        return randomNum;
     }
     public boolean binaryContains(int[][] a, int num, int rowIndex, int colIndex){
         // finds values in row
@@ -74,18 +87,13 @@ public class SudokuBoard{
             }
         }
 
-        // if the num is in any of them, return true;
-        if (binaryIsIn(row, num) || binaryIsIn(col, num) || binaryIsIn(square, num))
-            return true;
-        
-        // else return false
-        return false;
+        return (binaryIsIn(row, num) || binaryIsIn(col, num) || binaryIsIn(square, num));
     }
     
     public boolean binaryIsIn(int[] array, int num){
         Arrays.sort(array);
         int left = 0;
-        int right = array.length;
+        int right = array.length - 1;
         while (left <= right) {
             int middle = (left + right) / 2;
             if (num == array [middle])
