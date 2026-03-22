@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 public class SudokuBoard{
     private int[][] board; 
-
     public SudokuBoard(){
         board = createValidBoard();
     }

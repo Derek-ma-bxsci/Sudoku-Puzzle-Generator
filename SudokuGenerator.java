@@ -13,8 +13,8 @@ public class SudokuGenerator{
                 }
                 System.out.println("|");
             }
-            System.out.print("+-------+-------+-------+");
         }
+        System.out.print("+-------+-------+-------+");
     }
     public static void main (String[] args){
         SudokuBoard puzzle = new SudokuBoard();
