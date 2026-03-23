@@ -1,7 +1,6 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 public class SudokuBoard{
-    private int[][] board; 
+    public int[][] board; 
     public SudokuBoard(){
         board = createValidBoard();
     }
@@ -42,6 +41,7 @@ public class SudokuBoard{
         list = shuffle(list);
         return list;
     }
+
     public ArrayList<Integer> shuffle(ArrayList<Integer> list){
         for (int i = 0; i < 50; i++){
             int index = (int)(Math.random() * 9);
@@ -51,6 +51,7 @@ public class SudokuBoard{
         }
         return list;
     }
+
     public int[] findNextEmpty(int[][] board){
         for (int i = 0; i < board.length; i++){
             for (int j = 0; j < board[0].length; j++){
@@ -64,7 +65,6 @@ public class SudokuBoard{
         return coords;
     }
 
-    
     public boolean isValid(int[][] board, int num, int row, int col) {
         // Check row and column
         for (int i = 0; i < 9; i++) {
