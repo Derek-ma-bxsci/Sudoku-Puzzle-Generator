@@ -11,10 +11,10 @@ public class SudokuGenerator{
                             "E for Easy (20 missing numbers, 3 mistakes) " + "\n" +
                             "N for Normal (30 missing numbers, 3 mistakes)" + "\n" +
                             "H for Hard (40 missing numbers, 2 mistakes)" + "\n" +
-                            "I for Insane (45 missing numbers, 1 mistake)" + "\n");
+                            "I for Insane (50 missing numbers, 1 mistake)" + "\n");
 
         String difficulty = sc.nextLine();
-        SolvableBoard sudokuGame = new SolvableBoard();
+        SolvableBoard sudokuGame = new SolvableBoard(difficulty);
         printSudoku(sudokuGame.getUnsolvedBoard());
         while (!sudokuGame.isLost() && !sudokuGame.isWon()){
             System.out.print("Row and col of guess (separate with a comma (1-9)): ");

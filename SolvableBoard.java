@@ -1,10 +1,29 @@
 public class SolvableBoard extends SudokuBoard{
     private int[][] unsolvedBoard;
-    private int mistakes;
-    public SolvableBoard(){
+    private int mistakes, maxMistakes, numRemovedValues;
+    private char difficulty;
+    public SolvableBoard(String d){
         super();
+        difficulty = d.toLowerCase().charAt(0);
         unsolvedBoard = createSolvableBoard(board);
         mistakes = 0;
+        switch (difficulty){
+            case 'e':
+                numRemovedValues = 20;
+                maxMistakes = 3;
+            case 'n':
+                numRemovedValues = 30;
+                maxMistakes = 3;
+            case 'h':
+                numRemovedValues = 40;
+                maxMistakes = 2;
+            case 'i':
+                numRemovedValues = 50;
+                maxMistakes = 1;
+            default: // same thing as normal
+                numRemovedValues = 30;
+                maxMistakes = 3;
+        }
     }
     
     public int[][] createSolvableBoard(int[][] originalBoard){
@@ -13,14 +32,14 @@ public class SolvableBoard extends SudokuBoard{
             unsolved[i] = originalBoard[i].clone(); 
         }
         int emptyCount = 0;
-        while (emptyCount <= 40){
+        while (emptyCount <= numRemovedValues){
             outer:
             for (int r = 0; r < originalBoard.length; r++){
                 for (int c = 0; c < originalBoard[0].length; c++){
                     if (unsolved[r][c] != 0 && (int)(Math.random() * 3) == 1){
                         unsolved[r][c] = 0;
                         emptyCount++;
-                        if (emptyCount >= 40) break outer;
+                        if (emptyCount >= numRemovedValues) break outer;
                     }
                 }
             }
@@ -54,10 +73,10 @@ public class SolvableBoard extends SudokuBoard{
     }
     
     public boolean isLost(){
-        return mistakes >= 3;
+        return mistakes >= maxMistakes;
     }
     public boolean isWon(){
         int[] availableCoords = findNextEmpty(unsolvedBoard);
-        return availableCoords[0] == -1 && mistakes < 3;
+        return availableCoords[0] == -1 && mistakes < maxMistakes;
     }
 }
