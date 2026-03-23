@@ -4,9 +4,8 @@ public class SudokuGenerator{
     public static void main (String[] args){
         //SudokuBoard puzzle = new SudokuBoard();
         //printSudoku(puzzle.getBoard());
-        // difficulty?
 
-        System.out.println("Welcome to sudoku!" + "\n" + 
+        System.out.print("Welcome to Sudoku!" + "\n" + 
                             "Please enter a difficulty: " + "\n" +
                             "E for Easy (20 missing numbers, 3 mistakes) " + "\n" +
                             "N for Normal (30 missing numbers, 3 mistakes)" + "\n" +
@@ -17,19 +16,59 @@ public class SudokuGenerator{
         SolvableBoard sudokuGame = new SolvableBoard(difficulty);
         printSudoku(sudokuGame.getUnsolvedBoard());
         while (!sudokuGame.isLost() && !sudokuGame.isWon()){
-            System.out.print("Row and col of guess (separate with a comma (1-9)): ");
-            String[] guess = sc.nextLine().split(",");
-            int row = Integer.valueOf(guess[0].trim()) - 1;
-            int col = Integer.valueOf(guess[1].trim()) - 1;
+            int value = -1, row = -1, col = -1;
+            while (value == -1){
+                boolean validInput = false;
+                System.out.print("Enter the row and column of your guess (separate with a comma, must be between 1 and 9): ");
+                String[] guess = sc.nextLine().split(",");
+                while (!validInput){ // makes sure that the entered value is makes sense and is in range
+                    if (guess.length < 2 || guess[0].equals("") || guess[1].equals("") || 
+                        !isNumber(guess[0]) || !isNumber(guess[1]) ) {
+                        System.out.print("Please enter a valid index: ");
+                        guess = sc.nextLine().split(",");
+                    } else {
+                        row = Integer.valueOf(guess[0].trim()) - 1;
+                        col = Integer.valueOf(guess[1].trim()) - 1;
+                        if (!isFrom1to9(row + 1) || !isFrom1to9(col + 1)){
+                            System.out.print("Please enter indexes that are between 1 to 9: ");
+                            guess = sc.nextLine().split(",");
+                        } else if (sudokuGame.isOccupied(row,col)){
+                            System.out.print("That cell is occupied. Please enter another index: ");
+                            guess = sc.nextLine().split(",");
+                        } else {
+                            validInput = true;
+                        }
+                    }
+                }
+                validInput = false;
 
-            System.out.print("Guessed value: ");
-            int value = sc.nextInt();
+                System.out.print("Guessed value (If you want to go back to picking an index, type \"return\"): ");
+                String input = sc.nextLine();
+                while (!validInput || !input.toLowerCase().equals("return")){
+                    if (!input.toLowerCase().equals("return")){
+                        if (isNumber(input)){
+                            value = Integer.parseInt(input);
+                                if (isFrom1to9(value)){
+                                    validInput = true;
+                                    break;
+                                } else {
+                                    value = -1;
+                                    System.out.print("Please enter a valid guess: ");
+                                    input = sc.nextLine();
+                                }
+                        } else {
+                            System.out.print("Please enter a valid guess: ");
+                            input = sc.nextLine();
+                        }
+                    }
+                }
+            }
             if (sudokuGame.isCorrectGuess(value, row, col)){
                 System.out.println("yes");
             } else {
                 System.out.println("no");
             }
-            System.out.println("Current mistakes amount: " + sudokuGame.getMistakes() + "/3");
+            System.out.println("Current mistakes amount: " + sudokuGame.getMistakes() + "/" + sudokuGame.getMaxMistakes());
             printSudoku(sudokuGame.getUnsolvedBoard());
             sc.nextLine();
         }
@@ -60,5 +99,18 @@ public class SudokuGenerator{
         }
         System.out.println("+-------+-------+-------+");
         System.out.println();
+    }
+
+    public static boolean isNumber(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean isFrom1to9(int num){
+        return num >= 1 && num <= 9;
     }
 }
