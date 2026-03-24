@@ -14,6 +14,8 @@ public class SudokuGenerator{
 
         String difficulty = sc.nextLine();
         SolvableBoard sudokuGame = new SolvableBoard(difficulty);
+        System.out.println("You may type \"quit\" anytime to stop the game." + "\n" +
+                            "Here is your starting board: " + "\n");
         printSudoku(sudokuGame.getUnsolvedBoard());
         while (!sudokuGame.isLost() && !sudokuGame.isWon()){
             int value = -1, row = -1, col = -1;
@@ -60,6 +62,8 @@ public class SudokuGenerator{
                             System.out.print("Please enter a valid guess: ");
                             input = sc.nextLine();
                         }
+                    } else {
+                        break;
                     }
                 }
             }
@@ -69,9 +73,10 @@ public class SudokuGenerator{
                 System.out.println("no");
             }
             System.out.println("Current mistakes amount: " + sudokuGame.getMistakes() + "/" + sudokuGame.getMaxMistakes());
+            System.out.println("Current state of board: ");
             printSudoku(sudokuGame.getUnsolvedBoard());
-            sc.nextLine();
         }
+
         if (sudokuGame.isWon()){
             System.out.println("nice");
         } else {
@@ -112,5 +117,8 @@ public class SudokuGenerator{
 
     public static boolean isFrom1to9(int num){
         return num >= 1 && num <= 9;
+    }
+    public static boolean isStringQuit(String str){
+        return str.toLowerCase().equals("quit");
     }
 }
