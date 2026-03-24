@@ -13,16 +13,21 @@ public class SudokuGenerator{
                             "I for Insane (50 missing numbers, 1 mistake)" + "\n");
 
         String difficulty = sc.nextLine();
+        boolean repeatInstructions = true;
         boolean gameStopped = false;
         SolvableBoard sudokuGame = new SolvableBoard(difficulty);
-        System.out.println("You may type \"quit\" anytime to stop the game." + "\n" +
-                            "Here is your starting board: " + "\n");
         printSudoku(sudokuGame.getUnsolvedBoard());
+        System.out.println("You may type \"quit\" anytime to stop the game." + "\n" +
+                            "Your starting board is printed above. " + "\n");
         while (!sudokuGame.isLost() && !sudokuGame.isWon() && !gameStopped){
             int value = -1, row = -1, col = -1;
             while (value == -1){
                 boolean validInput = false;
-                System.out.print("Enter the row and column of your guess (separate with a comma, must be between 1 and 9): ");
+                if (repeatInstructions){
+                    System.out.print("Enter the row and column of your guess (separate with a comma, must be between 1 and 9): ");
+                } else {
+                    System.out.print("Enter the row and column of your guess: ");
+                }
                 String[] guess = sc.nextLine().split(",");
                 outer:
                 while (!validInput){ // makes sure that the entered value is makes sense and is in range
@@ -51,7 +56,11 @@ public class SudokuGenerator{
                 }
                 if (!gameStopped){
                     validInput = false;
-                    System.out.print("Guessed value (If you want to go back to picking an index, type \"return\"): ");
+                    if (repeatInstructions){
+                        System.out.print("Guessed value (If you want to go back to picking an index, type \"return\"): ");
+                    } else {
+                        System.out.print("Guessed value: ");
+                    }
                     String input = sc.nextLine();
                     outer:
                     while (!validInput || !input.toLowerCase().equals("return")){
@@ -82,22 +91,23 @@ public class SudokuGenerator{
                     }
                     if (!gameStopped){
                         if (sudokuGame.isCorrectGuess(value, row, col)){
-                            System.out.println("yes");
+                            System.out.println("Your guess was correct!");
                         } else {
-                            System.out.println("no");
+                            System.out.println("Your guess was incorrect.");
                         }
                         System.out.println("Current mistakes amount: " + sudokuGame.getMistakes() + "/" + sudokuGame.getMaxMistakes());
                         System.out.println("Current state of board: ");
                         printSudoku(sudokuGame.getUnsolvedBoard());
                     }
+                    repeatInstructions = false;
                 }
             }
         }
         if (!gameStopped){
             if (sudokuGame.isWon()){
-                System.out.println("nice");
+                System.out.println("Congratulations, you have completed the sudoku puzzle!");
             } else {
-                System.out.println("you lost");
+                System.out.println("Unfortunately, you have lost the game.");
             }
         }
     }
