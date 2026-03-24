@@ -13,19 +13,26 @@ public class SudokuGenerator{
                             "I for Insane (50 missing numbers, 1 mistake)" + "\n");
 
         String difficulty = sc.nextLine();
+        boolean gameStopped = false;
         SolvableBoard sudokuGame = new SolvableBoard(difficulty);
         System.out.println("You may type \"quit\" anytime to stop the game." + "\n" +
                             "Here is your starting board: " + "\n");
         printSudoku(sudokuGame.getUnsolvedBoard());
-        while (!sudokuGame.isLost() && !sudokuGame.isWon()){
+        while (!sudokuGame.isLost() && !sudokuGame.isWon() && !gameStopped){
             int value = -1, row = -1, col = -1;
             while (value == -1){
                 boolean validInput = false;
                 System.out.print("Enter the row and column of your guess (separate with a comma, must be between 1 and 9): ");
                 String[] guess = sc.nextLine().split(",");
+                outer:
                 while (!validInput){ // makes sure that the entered value is makes sense and is in range
-                    if (guess.length < 2 || guess[0].equals("") || guess[1].equals("") || 
-                        !isNumber(guess[0]) || !isNumber(guess[1]) ) {
+                    if (guess.length < 2 && isStringQuit(guess[0])){
+                        gameStopped = true;
+                        validInput = true;
+                        value = 0;
+                        System.out.println("Game stopped.");
+                        break outer;
+                    } else if (!isNumber(guess[0]) || !isNumber(guess[1])) {
                         System.out.print("Please enter a valid index: ");
                         guess = sc.nextLine().split(",");
                     } else {
@@ -42,45 +49,56 @@ public class SudokuGenerator{
                         }
                     }
                 }
-                validInput = false;
-
-                System.out.print("Guessed value (If you want to go back to picking an index, type \"return\"): ");
-                String input = sc.nextLine();
-                while (!validInput || !input.toLowerCase().equals("return")){
-                    if (!input.toLowerCase().equals("return")){
-                        if (isNumber(input)){
-                            value = Integer.parseInt(input);
-                                if (isFrom1to9(value)){
-                                    validInput = true;
-                                    break;
-                                } else {
-                                    value = -1;
-                                    System.out.print("Please enter a valid guess: ");
-                                    input = sc.nextLine();
-                                }
+                if (!gameStopped){
+                    validInput = false;
+                    System.out.print("Guessed value (If you want to go back to picking an index, type \"return\"): ");
+                    String input = sc.nextLine();
+                    outer:
+                    while (!validInput || !input.toLowerCase().equals("return")){
+                        if (isStringQuit(input)){
+                            gameStopped = true;
+                            validInput = true;
+                            value = 0;
+                            System.out.println("Game stopped.");
+                            break outer;
+                        } else if (!input.toLowerCase().equals("return")){
+                            if (isNumber(input)){
+                                value = Integer.parseInt(input);
+                                    if (isFrom1to9(value)){
+                                        validInput = true;
+                                        break;
+                                    } else {
+                                        value = -1;
+                                        System.out.print("Please enter a valid guess: ");
+                                        input = sc.nextLine();
+                                    }
+                            } else {
+                                System.out.print("Please enter a valid guess: ");
+                                input = sc.nextLine();
+                            }
                         } else {
-                            System.out.print("Please enter a valid guess: ");
-                            input = sc.nextLine();
+                            break;
                         }
-                    } else {
-                        break;
+                    }
+                    if (!gameStopped){
+                        if (sudokuGame.isCorrectGuess(value, row, col)){
+                            System.out.println("yes");
+                        } else {
+                            System.out.println("no");
+                        }
+                        System.out.println("Current mistakes amount: " + sudokuGame.getMistakes() + "/" + sudokuGame.getMaxMistakes());
+                        System.out.println("Current state of board: ");
+                        printSudoku(sudokuGame.getUnsolvedBoard());
                     }
                 }
             }
-            if (sudokuGame.isCorrectGuess(value, row, col)){
-                System.out.println("yes");
-            } else {
-                System.out.println("no");
-            }
-            System.out.println("Current mistakes amount: " + sudokuGame.getMistakes() + "/" + sudokuGame.getMaxMistakes());
-            System.out.println("Current state of board: ");
-            printSudoku(sudokuGame.getUnsolvedBoard());
         }
-
-        if (sudokuGame.isWon()){
-            System.out.println("nice");
-        } else {
-            System.out.println("you lost");
+        if (!gameStopped){
+            if (sudokuGame.isWon()){
+                System.out.println("nice");
+            } else {
+                System.out.println("you lost");
+            }
         }
     }
     
