@@ -17,8 +17,8 @@ public class SudokuGenerator{
         boolean gameStopped = false;
         SolvableBoard sudokuGame = new SolvableBoard(difficulty);
         printSudoku(sudokuGame.getUnsolvedBoard());
-        System.out.println("You may type \"quit\" anytime to stop the game." + "\n" +
-                            "Your starting board is printed above. " + "\n");
+        System.out.println("Your starting board is printed above. " + "\n" + 
+                           "You may type \"quit\" anytime to stop the game." + "\n");
         while (!sudokuGame.isLost() && !sudokuGame.isWon() && !gameStopped){
             int value = -1, row = -1, col = -1;
             while (value == -1){
@@ -107,7 +107,7 @@ public class SudokuGenerator{
             if (sudokuGame.isWon()){
                 System.out.println("Congratulations, you have completed the sudoku puzzle!");
             } else {
-                System.out.println("Unfortunately, you have lost the game.");
+                System.out.println("Unfortunately, you have lost the game. Better luck next time!");
             }
         }
     }

@@ -11,20 +11,19 @@ public class SolvableBoard extends SudokuBoard{
     }
     
     public int[][] createSolvableBoard(int[][] originalBoard){
-        int values = this.numRemovedValues;
         int[][] unsolved = new int[originalBoard.length][originalBoard[0].length];
         for (int i = 0; i < originalBoard.length; i++) { // references for some reason
             unsolved[i] = originalBoard[i].clone(); 
         }
         int emptyCount = 0;
-        while (emptyCount <= values){
+        while (emptyCount < numRemovedValues){
             outer:
             for (int r = 0; r < originalBoard.length; r++){
                 for (int c = 0; c < originalBoard[0].length; c++){
-                    if (unsolved[r][c] != 0 && (int)(Math.random() * 3) == 1){
+                    if (unsolved[r][c] != 0 && (int)(Math.random() * 4) == 1){
                         unsolved[r][c] = 0;
                         emptyCount++;
-                        if (emptyCount >= values) break outer;
+                        if (emptyCount >= numRemovedValues) break outer;
                     }
                 }
             }
@@ -53,6 +52,7 @@ public class SolvableBoard extends SudokuBoard{
             default: // same thing as normal
                 numRemovedValues = 30;
                 maxMistakes = 3;
+                System.out.println("The difficulty has been defaulted to normal.");
                 break;
         }
     }

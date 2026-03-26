@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 public class SudokuBoard{
-    public int[][] board; 
+    public int[][] board; // public because its a parent class
     public SudokuBoard(){
         board = createValidBoard();
     }
