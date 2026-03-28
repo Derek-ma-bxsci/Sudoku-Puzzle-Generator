@@ -2,17 +2,21 @@ import java.util.Scanner;
 public class SudokuGenerator{
     public static Scanner sc = new Scanner(System.in);
     public static void main (String[] args){
-        //SudokuBoard puzzle = new SudokuBoard();
-        //printSudoku(puzzle.getBoard());
-
         System.out.print("Welcome to Sudoku!" + "\n" + 
                             "Please enter a difficulty: " + "\n" +
                             "E for Easy (20 missing numbers, 3 mistakes) " + "\n" +
                             "N for Normal (30 missing numbers, 3 mistakes)" + "\n" +
                             "H for Hard (40 missing numbers, 2 mistakes)" + "\n" +
-                            "I for Insane (50 missing numbers, 1 mistake)" + "\n");
+                            "I for Insane (50 missing numbers, 1 mistake)" + "\n"  +
+                            "Alternatively type S to see a solved board: ");
 
         String difficulty = sc.nextLine();
+        if (difficulty.toLowerCase().charAt(0) == 's'){
+            SudokuBoard solvedBoard = new SudokuBoard();
+            System.out.println("Here is your solved sudoku board:");
+            printSudoku(solvedBoard.getBoard());
+            return;
+        }
         boolean repeatInstructions = true;
         boolean gameStopped = false;
         SolvableBoard sudokuGame = new SolvableBoard(difficulty);
@@ -31,13 +35,13 @@ public class SudokuGenerator{
                 String[] guess = sc.nextLine().split(",");
                 outer:
                 while (!validInput){ // makes sure that the entered value is makes sense and is in range
-                    if (guess.length < 2 && isStringQuit(guess[0])){
+                    if (guess.length == 1 && isStringQuit(guess[0])){
                         gameStopped = true;
                         validInput = true;
                         value = 0;
                         System.out.println("Game stopped.");
                         break outer;
-                    } else if (!isNumber(guess[0]) || !isNumber(guess[1])) {
+                    } else if (guess.length != 2 || !isNumber(guess[0]) || !isNumber(guess[1])) {
                         System.out.print("Please enter a valid index: ");
                         guess = sc.nextLine().split(",");
                     } else {
