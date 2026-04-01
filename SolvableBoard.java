@@ -10,9 +10,10 @@ public class SolvableBoard extends SudokuBoard{
         mistakes = 0;
     }
     
-    public int[][] createSolvableBoard(int[][] originalBoard){
+    public int[][] createSolvableBoard(int[][] originalBoard){ // Clones the solved board and removes random numbers from it
         int[][] unsolved = new int[originalBoard.length][originalBoard[0].length];
-        for (int i = 0; i < originalBoard.length; i++) { // references for some reason
+
+        for (int i = 0; i < originalBoard.length; i++) {
             unsolved[i] = originalBoard[i].clone(); 
         }
         int emptyCount = 0;
@@ -31,7 +32,7 @@ public class SolvableBoard extends SudokuBoard{
         return unsolved;
     }
 
-    public void setDifficulty(char difficulty){
+    public void setDifficulty(char difficulty){ // Set the number of removed values and max mistakes based off difficulty
         switch (difficulty){
             case 'e':
                 numRemovedValues = 20;
@@ -57,7 +58,7 @@ public class SolvableBoard extends SudokuBoard{
         }
     }
 
-    public boolean isCorrectGuess(int guessedValue, int row, int col){
+    public boolean isCorrectGuess(int guessedValue, int row, int col){ // Checks with the solved board to see if the entered value is correct
         if (board[row][col] == guessedValue){
             setBoardValue(guessedValue, row, col);
             return true;

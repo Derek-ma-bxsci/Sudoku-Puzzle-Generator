@@ -15,7 +15,7 @@ public class SudokuGenerator{
             SudokuBoard solvedBoard = new SudokuBoard();
             System.out.println("Here is your solved sudoku board:");
             printSudoku(solvedBoard.getBoard());
-            return;
+            return; // Stops the program entirely
         }
         boolean repeatInstructions = true;
         boolean gameStopped = false;
@@ -34,20 +34,20 @@ public class SudokuGenerator{
                 }
                 String[] guess = sc.nextLine().split(",");
                 outer:
-                while (!validInput){ // makes sure that the entered value is makes sense and is in range
-                    if (guess.length == 1 && isStringQuit(guess[0])){
+                while (!validInput){ // Prevents the code from moving until a valid input is given
+                    if (guess.length == 1 && isStringQuit(guess[0])){ // Stops all the code if the input is quit
                         gameStopped = true;
                         validInput = true;
                         value = 0;
                         System.out.println("Game stopped.");
                         break outer;
-                    } else if (guess.length != 2 || !isNumber(guess[0]) || !isNumber(guess[1])) {
+                    } else if (guess.length != 2 || !isNumber(guess[0]) || !isNumber(guess[1])) { // Checks if there is only one comma and the inputs are numbers
                         System.out.print("Please enter a valid index: ");
                         guess = sc.nextLine().split(",");
                     } else {
                         row = Integer.valueOf(guess[0].trim()) - 1;
                         col = Integer.valueOf(guess[1].trim()) - 1;
-                        if (!isFrom1to9(row + 1) || !isFrom1to9(col + 1)){
+                        if (!isFrom1to9(row + 1) || !isFrom1to9(col + 1)){ // Checks if the coords inputted are between 1 to 9
                             System.out.print("Please enter indexes that are between 1 to 9: ");
                             guess = sc.nextLine().split(",");
                         } else if (sudokuGame.isOccupied(row,col)){
@@ -94,6 +94,7 @@ public class SudokuGenerator{
                         }
                     }
                     if (!gameStopped){
+                        System.out.println();
                         if (sudokuGame.isCorrectGuess(value, row, col)){
                             System.out.println("Your guess was correct!");
                         } else {
@@ -103,7 +104,7 @@ public class SudokuGenerator{
                         System.out.println("Current state of board: ");
                         printSudoku(sudokuGame.getUnsolvedBoard());
                     }
-                    repeatInstructions = false;
+                    repeatInstructions = false; // Once an attempt at guessing is done, prevent the information in the parentheses from showig up
                 }
             }
         }
@@ -116,7 +117,7 @@ public class SudokuGenerator{
         }
     }
     
-    public static void printSudoku(int[][] board){
+    public static void printSudoku(int[][] board){ // Prints a Sudoku board in the desired format
         for (int i = 0; i < 3; i++){
             System.out.println("+-------+-------+-------+");
             for (int j = 0; j < 3; j++){
@@ -138,19 +139,20 @@ public class SudokuGenerator{
         System.out.println();
     }
 
-    public static boolean isNumber(String str) {
+    public static boolean isNumber(String str) { // Checks if the string is a number
         try {
-            Integer.parseInt(str);
+            Integer.parseInt(str); // Returns true if this line does not throw an error
             return true;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
-    public static boolean isFrom1to9(int num){
+    public static boolean isFrom1to9(int num){ // Returns true if the number is between 1 to 9
         return num >= 1 && num <= 9;
     }
-    public static boolean isStringQuit(String str){
+    
+    public static boolean isStringQuit(String str){ // Checks if the string is equal to "quit"
         return str.toLowerCase().equals("quit");
     }
 }
