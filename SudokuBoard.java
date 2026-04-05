@@ -13,7 +13,7 @@ public class SudokuBoard{
             boolean availableValuePut = false;
             while (!availableValuePut){
                 int[] coords = findNextEmpty(newBoard);
-                ArrayList<Integer> shuffledNums = randomNumList();
+                ArrayList<Integer> shuffledNums = randomNumList(); // Generates a list in random order
                 for (int i = 0; i < shuffledNums.size() && !availableValuePut; i++){
                     int num = shuffledNums.get(i);
                     if (isValid(newBoard, num, coords[0], coords[1])){
@@ -49,16 +49,16 @@ public class SudokuBoard{
     }
 
     public int[] findNextEmpty(int[][] board){ // Finds the coords of the next value that is zero
-        for (int i = 0; i < board.length; i++){
-            for (int j = 0; j < board[0].length; j++){
-                if (board[i][j] == 0){
-                    int[] coords = {i, j};
+        for (int r = 0; r < board.length; r++){
+            for (int c = 0; c < board[0].length; c++){
+                if (board[r][c] == 0){
+                    int[] coords = {r, c}; // Returns the coords in a 1D array format
                     return coords;
                 }
             }
         }
         int[] coords = {-1, -1};
-        return coords; // returns (-1, -1) if not found
+        return coords; // Returns (-1, -1) if not found
     }
 
     public boolean isValid(int[][] board, int num, int row, int col) { // Checks to see if the number is not present in the row, column, or box it is in

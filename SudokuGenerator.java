@@ -11,6 +11,7 @@ public class SudokuGenerator{
                             "Alternatively type S to see a solved board: ");
 
         String difficulty = sc.nextLine();
+        System.out.println();
         if (difficulty.toLowerCase().charAt(0) == 's'){
             SudokuBoard solvedBoard = new SudokuBoard();
             System.out.println("Here is your solved sudoku board:");
@@ -35,7 +36,7 @@ public class SudokuGenerator{
                 String[] guess = sc.nextLine().split(",");
                 outer:
                 while (!validInput){ // Prevents the code from moving until a valid input is given
-                    if (guess.length == 1 && isStringQuit(guess[0])){ // Stops all the code if the input is quit
+                    if (guess.length == 1 && isStringQuit(guess[0])){ // Stops the code if the input is quit
                         gameStopped = true;
                         validInput = true;
                         value = 0;
@@ -67,17 +68,17 @@ public class SudokuGenerator{
                     }
                     String input = sc.nextLine();
                     outer:
-                    while (!validInput || !input.toLowerCase().equals("return")){
-                        if (isStringQuit(input)){
+                    while (!validInput || !input.toLowerCase().equals("return")){ // Continues until the input is return or a valid one is given
+                        if (isStringQuit(input)){ // Stops the code if the input is quit
                             gameStopped = true;
                             validInput = true;
                             value = 0;
                             System.out.println("Game stopped.");
                             break outer;
-                        } else if (!input.toLowerCase().equals("return")){
-                            if (isNumber(input)){
+                        } else if (!input.toLowerCase().equals("return")){ // Stops asking for a value once the input is return
+                            if (isNumber(input)){ // Checks if the input is a number
                                 value = Integer.parseInt(input);
-                                    if (isFrom1to9(value)){
+                                    if (isFrom1to9(value)){ // Checks if the input is between 1 to 9
                                         validInput = true;
                                         break;
                                     } else {
@@ -95,7 +96,7 @@ public class SudokuGenerator{
                     }
                     if (!gameStopped){
                         System.out.println();
-                        if (sudokuGame.isCorrectGuess(value, row, col)){
+                        if (sudokuGame.isCorrectGuess(value, row, col)){ // Evaluates if the guess is correct
                             System.out.println("Your guess was correct!");
                         } else {
                             System.out.println("Your guess was incorrect.");
@@ -104,12 +105,12 @@ public class SudokuGenerator{
                         System.out.println("Current state of board: ");
                         printSudoku(sudokuGame.getUnsolvedBoard());
                     }
-                    repeatInstructions = false; // Once an attempt at guessing is done, prevent the information in the parentheses from showig up
+                    repeatInstructions = false; // Once an attempt at guessing is done, prevent the information in the parentheses from showing up
                 }
             }
         }
         if (!gameStopped){
-            if (sudokuGame.isWon()){
+            if (sudokuGame.isWon()){ // Prints different messages based off if the user won or not
                 System.out.println("Congratulations, you have completed the sudoku puzzle!");
             } else {
                 System.out.println("Unfortunately, you have lost the game. Better luck next time!");

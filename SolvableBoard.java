@@ -50,7 +50,7 @@ public class SolvableBoard extends SudokuBoard{
                 numRemovedValues = 50;
                 maxMistakes = 1;
                 break;
-            default: // same thing as normal
+            default: // same mistakes and removed values as normal
                 numRemovedValues = 30;
                 maxMistakes = 3;
                 System.out.println("The difficulty has been defaulted to normal.");
@@ -63,7 +63,7 @@ public class SolvableBoard extends SudokuBoard{
             setBoardValue(guessedValue, row, col);
             return true;
         }
-        mistakes++;
+        mistakes++; // If not, add a mistake to the count
         return false;
     }
 
